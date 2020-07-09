@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>JVM&amp;JUC基础课程（主讲：周阳） | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="#JVM &amp; JUC 基础课程（主讲：周阳）##多线程知识及应用 ###Lesson 001 SaleTicket案例   题目：3个售票员卖出30张票 要求：编写企业级的多线程代码     解题思路： 1.在高内聚低耦合下，线程操作资源类 2.加锁，否则无法同步     问题一：解释进程和线程 答：进程是电脑后台运行的程序，线程是轻量级的进程。 问题二：举一个日常用到的软件，用到进程和线">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM&amp;JUC基础课程（主讲：周阳）">
+<meta property="og:url" content="http://yoursite.com/2020/07/09/JVM&JUC%E5%9F%BA%E7%A1%80%E8%AF%BE%E7%A8%8B%EF%BC%88%E4%B8%BB%E8%AE%B2%EF%BC%9A%E5%91%A8%E9%98%B3%EF%BC%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#JVM &amp; JUC 基础课程（主讲：周阳）##多线程知识及应用 ###Lesson 001 SaleTicket案例   题目：3个售票员卖出30张票 要求：编写企业级的多线程代码     解题思路： 1.在高内聚低耦合下，线程操作资源类 2.加锁，否则无法同步     问题一：解释进程和线程 答：进程是电脑后台运行的程序，线程是轻量级的进程。 问题二：举一个日常用到的软件，用到进程和线">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://yoursite.com/2020/07/09/JVM&JUC%E5%9F%BA%E7%A1%80%E8%AF%BE%E7%A8%8B%EF%BC%88%E4%B8%BB%E8%AE%B2%EF%BC%9A%E5%91%A8%E9%98%B3%EF%BC%89/1.png">
+<meta property="article:published_time" content="2020-07-09T03:59:09.879Z">
+<meta property="article:modified_time" content="2020-06-27T13:27:48.637Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/07/09/JVM&JUC%E5%9F%BA%E7%A1%80%E8%AF%BE%E7%A8%8B%EF%BC%88%E4%B8%BB%E8%AE%B2%EF%BC%9A%E5%91%A8%E9%98%B3%EF%BC%89/1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-JVM&amp;JUC基础课程（主讲：周阳）" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/09/JVM&JUC%E5%9F%BA%E7%A1%80%E8%AF%BE%E7%A8%8B%EF%BC%88%E4%B8%BB%E8%AE%B2%EF%BC%9A%E5%91%A8%E9%98%B3%EF%BC%89/" class="article-date">
+  <time datetime="2020-07-09T03:59:09.879Z" itemprop="datePublished">2020-07-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JVM&amp;JUC基础课程（主讲：周阳）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="JVM-amp-JUC-基础课程（主讲：周阳）"><a href="#JVM-amp-JUC-基础课程（主讲：周阳）" class="headerlink" title="#JVM &amp; JUC 基础课程（主讲：周阳）"></a>#JVM &amp; JUC 基础课程（主讲：周阳）</h2><p>##多线程知识及应用</p>
+<p>###Lesson 001 SaleTicket案例</p>
+<pre>
+<font face="黑体" font size = 3>
+题目：3个售票员卖出30张票<br/>
+要求：编写企业级的多线程代码<br/>
+</pre>
+
+<pre>
+<font face = "黑体" font size = 3>
+解题思路：<br/>
+1.在高内聚低耦合下，线程操作资源类<br/>
+2.加锁，否则无法同步
+</pre>
+
+<pre>
+<font face = "黑体" font size = 3>
+问题一：解释进程和线程<br/>
+答：进程是电脑后台运行的程序，线程是轻量级的进程。<br/>
+问题二：举一个日常用到的软件，用到进程和线程的例子<br/>
+答：QQ.exe是QQ的一个进程，用同一个QQ分别文字聊天、视频聊天（线程）同属于一个进程。<br/>
+问题三：解释并发和并行<br/>
+答：并发是多个线程同一时间争抢同一资源。比如同一时间抢票、秒杀。并行是多个线程同时操作资源，比如泡面。<br/>
+问题四：接口能不能new<br/>
+答：接口是特殊的类，可以new。但如果new成匿名内部类，就需要把方法都实现一遍，挺麻烦，所以有了多态，左边为接口，右边为实现类。<br/>
+问题五：多线程有哪几种状态<br/>
+答：五种。① 新建 new ② 就绪 runnable ③ 阻塞 block ④ 死等 waiting ⑤ 过时不候 timed-waiting
+</pre>
+
+<pre>
+<font face = "黑体" font size = 3>
+注意：线程start之后，绝不是立刻启动，多线程的调动和底层的系统和CPU有关。<br/>
+</pre>
+<br/>
+---
+
+<h3 id="Lesson-002-LambdaExpress"><a href="#Lesson-002-LambdaExpress" class="headerlink" title="Lesson 002 LambdaExpress"></a>Lesson 002 LambdaExpress</h3><pre>
+<font face = "黑体" font size = 3>
+知识点一：Lambda表达式<br/>
+为解决匿名内部类代码冗余现象（不然要重写接口的方法），拷贝小括号、写死右箭头、落地大括号。<br/>
+知识点二：@FunctionalInterface<br/>
+该注释用于检查该接口是否为函数式接口。函数式接口一般只有一个输出，类似于函数f(x) = y。<br/>
+定义一个接口，其中只有方法声明，没有方法实现（java8之后允许有部分实现）<br/>
+接口中有且只有一个声明方法，就是函数式接口。<br/>
+知识点三：default<br/>
+在函数式接口中，可定义default方法，并且可定义多个。<br/>
+知识点四：static<br/>
+在函数式接口中，可定义static方法，并且可定义多个。<br/>
+</pre>
+<br>
+---
+
+<h3 id="Lesson-004-集合类不安全"><a href="#Lesson-004-集合类不安全" class="headerlink" title="Lesson 004 集合类不安全"></a>Lesson 004 集合类不安全</h3><table>
+<thead>
+<tr>
+<th align="center">接口</th>
+<th align="center">List</th>
+<th align="center">Set</th>
+<th align="center">Map</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">类</td>
+<td align="center">ArrayList</td>
+<td align="center">HashSet</td>
+<td align="center">HashMap</td>
+</tr>
+<tr>
+<td align="center">解决</td>
+<td align="center">CopyOnWriteArrayList</td>
+<td align="center">CopyOnWriteArraySet</td>
+<td align="center">ConcurrentHashMap</td>
+</tr>
+<tr>
+<td align="center">以上三种集合类都不安全。<br/></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">原因：多线程争抢同一资源类，没有加锁导致的。</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">故障现象：java.util.ConcurrentModificationException(并发修改异常)</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<pre>
+<font face = "黑体" font size = 3>
+问题一：当我new了一个ArrayList,底层实际new了一个什么?<br/>
+答：ArrayList数据库为数组，数组元素为Object<br/>
+问题二：ArrayList的默认初始长度是多少？<br/>
+答：初始化一个长度为10的Object数组。HashMap的初始长度为16。<br/>
+问题三：ArrayList扩容多少？如何扩容？<br/>
+答：扩大一半：10 -> 15 -> 15 + [15 / 2] = 22。搬家过程：Array.copy()。HashMap扩大一倍。<br/>
+问题四：ArrayList线程安全吗？<br/>
+答：不安全。<br/>
+问题五：写一个ArrayList、HashMap、HashSet线程不安全的代码。<br/>
+    public static void main(String[] args) {
+        //List a = new ArrayList();                     // ArrayList线程不安全（效率第一）
+        List<String> a = new CopyOnWriteArrayList<>();
+        // 30个线程同时操作一个ArrayList
+        for (int i = 0; i <= 30; i++) {
+            new Thread(() -> {
+                a.add(UUID.randomUUID().toString().substring(0,8));
+                System.out.println(a);
+            }, String.valueOf(i)).start();
+        }
+    }
+
+
+    public static void main(String[] args) {
+        //Set a = new HashSet();                     // HashSet()线程不安全
+        Set<String> a = new CopyOnWriteArraySet<>();
+        // 30个线程同时操作一个ArrayList
+        for (int i = 0; i <= 30; i++) {
+            new Thread(() -> {
+                a.add(UUID.randomUUID().toString().substring(0,8));
+                System.out.println(a);
+            }, String.valueOf(i)).start();
+        }
+    }
+
+
+        public static void main(String[] args) {
+        // Map<String, String> map = new HashMap<>(); // HashMap线程也不安全
+        Map<String, String> map = new ConcurrentHashMap<>();
+
+        for (int i = 0; i <= 30; i++) {
+            new Thread(() -> {
+                map.put(UUID.randomUUID().toString().substring(0,2), UUID.randomUUID().toString().substring(0, 8));
+                System.out.println(map);
+            }, String.valueOf(i).toString()).start();
+        }
+    }
+
+
+问题六：Collection和Collections的区别？<br/>
+答：前者为接口(集合类的一个顶级接口)，后者为集合接口的包装类（工具类、帮助类），此类不能实例化，用于对集合中元素进行排序、搜索以及线程安全等各种操作，服务于Java的Collection框架。<br/>
+问题七：HashSet的底层结构？<br/>
+答：HashMap。<br/>
+问题八：HashSet在add操作时，只有一个参数，而HashMap在put()操作时却加入两个参数，一个是key，一个是value，它的底层结构真的是HashMap吗？<br/>
+答：真的是，
+public boolean add(E e){
+    return map.put(e, PRESENT) == null;    
+} # 加了一个Object类（PRESENT）作为value<br/>
+问题九：四大函数接口是什么？<br/>
+答：1.提供者（supplier）：不接受参数，但提供返回值(getter())
+    2.消费者（consumer）：接收一个参数，无返回值(foreach)
+    3.函数（function）：接收函数，输出结果
+    4.断言型（predicate）：用于判断操作，返回Boolean
+</pre>
+
+<p><img src="1.png" alt=""></p>
+<h3 id="lesson-006-八锁"><a href="#lesson-006-八锁" class="headerlink" title="lesson 006 八锁"></a>lesson 006 八锁</h3><pre>
+<font face = "黑体" font size = 3>
+只要在同资源类中，不管有几个synchronized方法，只要一个线程先访问了资源类里的任一synchronized方法，
+那么它锁的是整个资源类，锁了这个对象this（**对象锁**），被锁定后，其他线程不能进入当前对象的synchronized
+方法。**某一时刻内，只有唯一线程访问对象的synchronized方法。<br/>**
+加个普通方法后，发现与同步锁无关。<br/>
+换成两个对象之后，就不是一把锁了。<br/>
+static修饰的方法，属于整个类，而非某个对象，static锁的是“**全局锁**”。<br/>
+synchronized同步的基础：java中的每个对象都可作为锁。
+① 对于普通同步方法，锁是当前对象this
+② 对于同步方法块，锁是synchronized括号里的配置对象。
+③ 对于静态同步方法类，锁是当前Class对象。<br/>
+当一个线程试图访问同步代码块时，它必须得到锁，退出或抛出异常时，要释放锁。
+即，若一个对象的非静态同步方法获取锁，该实例对象的其他非静态同步方法要等锁释放后，才能获取锁。
+但**别的对象的非静态同步方法，因为不是同一把锁，所以不必等待。**<br/>
+所有静态同步方法用的也是同一把锁——类对象本身。
+两把锁是不同的对象，故静态同步方法与非静态同步方法**无竞态条件**。
+但某静态同步方法获取锁后，其他静态同步方法要等待释放。
+</pre>
+
+<h3 id="lesson-014-生产者消费者"><a href="#lesson-014-生产者消费者" class="headerlink" title="lesson 014 生产者消费者"></a>lesson 014 生产者消费者</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/07/09/JVM&JUC%E5%9F%BA%E7%A1%80%E8%AF%BE%E7%A8%8B%EF%BC%88%E4%B8%BB%E8%AE%B2%EF%BC%9A%E5%91%A8%E9%98%B3%EF%BC%89/" data-id="ckce9ng7y00005oupfsiuczxh" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/07/09/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">我的第一篇博客文章</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/07/09/JVM&JUC%E5%9F%BA%E7%A1%80%E8%AF%BE%E7%A8%8B%EF%BC%88%E4%B8%BB%E8%AE%B2%EF%BC%9A%E5%91%A8%E9%98%B3%EF%BC%89/">JVM&amp;JUC基础课程（主讲：周阳）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/09/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0/">我的第一篇博客文章</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/09/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
