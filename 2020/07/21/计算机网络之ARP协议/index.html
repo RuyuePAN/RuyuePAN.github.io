@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>动态规划之二叉搜索树 - Hexo</title>
+  <title>计算机网络之ARP协议 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -153,8 +153,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-07-20 17:20">
-      July 20, 2020 pm
+    <time datetime="2020-07-21 21:17">
+      July 21, 2020 pm
     </time>
   </div>
 
@@ -164,7 +164,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      376 字
+      953 字
     </span>
   
 
@@ -174,7 +174,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      4
+      10
        分钟
     </span>
   
@@ -205,117 +205,76 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <p><strong>题目：96. 不同的二叉搜索树</strong></p>
-<p>给定一个整数 n，求以 1 … n 为节点组成的二叉搜索树有多少种？</p>
-<pre>
-<font face="黑体" font size = 3>
-示例:
-
-输入: 3
-输出: 5
-解释:
-给定 n = 3, 一共有 5 种不同结构的二叉搜索树:
-
-   1         3     3      2      1
-    \       /     /      / \      \
-     3     2     1      1   3      2
-    /     /       \                 \
-   2     1         2                 3
-
-</pre>
-
-
-<p><strong>解题思路：</strong></p>
-<p>设G(n)为n个节点组成的二叉搜索树的种类数。设f(i)为以i为根节点的二叉树的数量。</p>
-<p>由二叉搜索树的特性可知，这棵树的左子树的结点序号为[1,2,3,…,i-1],一共i-1个。右子树的结点序号为[i+1,i+2,..,n],一共n-i个。</p>
-<p>所以左子树的一共有G(i-1)种，右子树有G(n-i)种。由排列组合原理可知，以i为根节点的二叉树数量f(i)=G(i-1)*G(n-i)</p>
-<p>因此状态转移方程为：</p>
-<p>G(n) = f(1)+f(2)+f(3)+…+f(n) = G(0)*G(n-1) + G(1)*G(n-1) +…+ G(n-1)*G(0)</p>
-<p><strong>算法复杂度分析：</strong></p>
-<p>首先，看代码有两层循环。外层循环是 n 次，内层循环是 i 次，也就是 2 + 3 + … + n,即时间复杂度为O(n*n)。</p>
-<p>其次，我们需要一个长度为 n 的数组，来存放计算结果，所以空间复杂度为 O(n).</p>
-<p><strong>代码如下：</strong></p>
-<pre>
-<font face="黑体" font size = 3>
-class Solution {
-    public int numTrees(int n) {
-        int[] memo = new int[n + 1];            // 创建一个备忘录
-        memo[0] = 1;                            // 边界条件
-        memo[1] = 1;
-        for (int i = 2; i <= n; i++) {          // 每次循环都向memo填入一个数字
-            int res = 0;                        // 用于存储累加结果
-            for(int j = 0; j <= i - 1; j++){    // 计算memo结果
-                res += memo[j] * memo[i - j - 1];
-            }
-            memo[i] = res;
-        }
-        return memo[n];
-    }
-}
-
-</pre>
-<hr>
-<p><strong>题目：95. 不同的二叉搜索树 II</strong></p>
-<p>给定一个整数 n，生成所有由 1 … n 为节点所组成的 二叉搜索树 。</p>
+              <p>这篇文章谈谈ARP协议，在开始之前，咱们先热热身：</p>
 <pre><font face="黑体" font size = 3>
-示例：
-输入：3
-输出：
-[
-  [1,null,3,2],
-  [3,2,null,1],
-  [3,1,null,null,2],
-  [2,1,3],
-  [1,null,2,null,3]
-]
-解释：
-以上的输出对应以下 5 种不同结构的二叉搜索树：
-
-   1         3     3      2      1
-    \       /     /      / \      \
-     3     2     1      1   3      2
-    /     /       \                 \
-   2     1         2                 3
+OSI七层模型中，ARP是属于哪一层的协议？
+A. 应用层
+B. 传输层
+C. 网络层
+D. 数据链路层
 
 </pre>
-<p><strong>解题思路：</strong></p>
-<p>这题要求我们构造二叉搜索树，考虑递归构造。树可以以1…n为根节点构造，所以需要遍历。<br>而以i为根节点的树，它的左子树是由[1,…,i-1]构成，右子树是由[i+1,…,n]构成，所以我们可以<br>start和end两个下标，分别表示构建一棵树的最小结点和最大结点。我们分别以[1,…,i-1]构建完左子<br>树集合和[i+1,…,n]右子树集合之后，就可以在两个集合中挑选出左右子树做拼接了。（两重for循环）</p>
-<p><strong>算法复杂度分析：</strong></p>
-<p>首先，生成一棵二叉搜索树的时间复杂度为O(n),(因为在每次调用构造二叉搜索树的函数时，都相当于确<br>定一个“根节点”，即确定一个结点的位置)。而对于 n 个点生成的二叉搜索树数量等价于数学上第 n 个<br>「卡特兰数」，用 G(n) 表示。所以时间复杂度为O(n * G(n)).</p>
-<p>其次，n个节点构成的树的空间复杂度为O(n),一共有G(n)棵树，所以空间复杂度也是O(n * G(n))。</p>
-<p><strong>代码如下：</strong></p>
+<pre><font face="黑体" font size = 3>解析：在OSI模型（七层）中，ARP协议属于数据链路层。在TCP/IP模型（五层）中，ARP协议属于网络层。选D。
+</pre>
+<p>在讲ARP协议之前先来复习两个概念：<strong>IP地址</strong>和<strong>MAC地址</strong>。</p>
+<p><strong>一、IP地址</strong><br>IP地址就是要在茫茫网络中找到特定电脑。既然网络由路由器和主机连接起来，那么这个IP地址就要能明确，哪个网络？哪台主机？<br>它有两个版本，大家都不陌生，分别为IPv4和IPv6。</p>
+<p><strong>1.IPv4地址</strong></p>
+<p>IP编址的历史阶段有三个，分别代表三种编址方式：</p>
+<p>(1) 分类的IP地址</p>
+<p>(2) 子网的划分</p>
+<p>(3) 构成超网（无分类编址方法）</p>
+<p>详细解释一下：</p>
+<p>(1) 分类的IP地址</p>
+<p>IP地址：计算机的身份证号，全世界唯一的32位/4字节的标识符，用于标识路由器主机的接口。</p>
+<p><strong>IP地址:={&lt;网络号&gt;,&lt;主机号&gt;}</strong>。</p>
+<p>注意：并不是一个IP地址标识一个主机，一个主机可以有很多接口。有线上网，就是有线接口。无线上网，就是无线接口。而路由器<br>也不单只有一个接口，一个路由器可以连很多个主机，也可以连很多的路由器。即，<strong>一个路由器有很多个接口，每个接口都会分配<br>一个唯一的IP地址。</strong></p>
 <pre><font face="黑体" font size = 3>
-class Solution {
-    public List<TreeNode> generateTrees(int n) {
-        if(n == 0)  return new LinkedList<TreeNode>();          // n=0时返回一个空列表即可
-        return generateTrees(1, n);                             // 可用结点范围是1-n
-    }
-    public List<TreeNode> generateTrees(int start, int end){
-        List<TreeNode> allTrees = new LinkedList<TreeNode>();
-        if(start > end){
-            allTrees.add(null);
-            return allTrees;
-        }
-        // 从start到end每一个都可以成为一个根节点
-        for(int i = start; i <= end; i++){
-            // 构建左子树
-            List<TreeNode> leftTree = generateTrees(start, i - 1);
-            // 构建右子树
-            List<TreeNode> rightTree = generateTrees(i + 1, end);
-            // 将左子树和右子树拼接起来
-            for(TreeNode left : leftTree){
-                for(TreeNode right : rightTree){
-                    TreeNode tree = new TreeNode(i);            // 根节点是i
-                    tree.left = left;
-                    tree.right = right;
-                    allTrees.add(tree);                         // 构造完一棵树后加入链表
-                }
-            }
-        }
-        return allTrees;
-    }
-}
+例如：某电脑的IP地址为11011111  00000001  00000001  00000001 = 223.1.1.1 (点分十进制表示)
+这前面的 11011111 = 223 为网络号，后面的 00000001  00000001  00000001 = 1.1.1 为主机号。
+
 </pre>
+
+<p>看下面这张图片：<br>图中有六个网络，橘色的部分分别为同一路由器接口所连接。</p>
+<p>左边的局域网为LAN1用222.1.3.0表示（同一网络的网络号相同，主机号各不相同）。</p>
+<p>上方的局域网为LAN2用222.1.1.0表示。</p>
+<p>右下角的局域网为LAN3用222.1.2.0表示，该网络中有一个网桥，已知网桥无法分割网段，即该网络只是一个局域网。</p>
+<p>且从图中可看出，一个路由器就有三个IP地址，每个接口一个地址。</p>
+<p>三个绿色区域为无编号网络（无名网络）</p>
+<p><img src="t.png" srcset="/img/loading.gif" alt=""></p>
+<p>下面是分类的IP地址：</p>
+<p>IP地址被分为了五类：ABCDE。它们的不同就在于，网络号分配的字节数不同。<br><img src="t1.png" srcset="/img/loading.gif" alt=""></p>
+<p>注意：并不是所有的IP地址都可以使用，会有一些特殊的IP地址，不能随便使用。</p>
+<p><img src="t2.png" srcset="/img/loading.gif" alt=""></p>
+<p>除了特殊IP地址，还有私有IP地址，用于本网，专用网。路由器对目的地址是私有IP地址的数据报一律不进行转发。<br>（放在外网或因特网中无效）<strong>私有IP地址</strong>如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">地址类别</th>
+<th align="center">地址范围</th>
+<th align="center">网段个数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">A类</td>
+<td align="center">10.0.0.0 - 10.255.255.255</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">B类</td>
+<td align="center">172.16.0.0 - 172.31.255.255</td>
+<td align="center">16</td>
+</tr>
+<tr>
+<td align="center">C类</td>
+<td align="center">192.168.0.0 - 192.168.255.255</td>
+<td align="center">256</td>
+</tr>
+</tbody></table>
+<p>私有IP地址如何能被因特网识别？</p>
+<p>需要<strong>网络地址转换NAT</strong>(Network Address Translation)技术：在<strong>专用网</strong>连接到<strong>因特网</strong>的路由器上安装NAT软件，安装了<br>软件的路由器叫<strong>NAT路由器</strong>，他至少有一个有效地<strong>外部全球IP地址</strong>。</p>
+<p>可以将NAT技术理解为翻译官，将内网IP地址翻译为外网IP地址。或者可以理解为，全村只有一台电话在村长的家里，<br>村民要打电话都要去村长家。有电话打进村，也都需要村长喊人来接。</p>
+<p><img src="t3.png" srcset="/img/loading.gif" alt=""></p>
+
             </article>
             <hr>
             <div>
@@ -325,11 +284,7 @@ class Solution {
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/leetcode%E5%88%B7%E9%A2%98/">leetcode刷题</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E6%A0%91/">树</a>
+                      <a class="hover-with-bg" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
                     
                   </div>
                 
@@ -342,18 +297,12 @@ class Solution {
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/07/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8BARP%E5%8D%8F%E8%AE%AE/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">计算机网络之ARP协议</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/07/09/JVM&amp;JUC%E5%9F%BA%E7%A1%80%E8%AF%BE%E7%A8%8B%EF%BC%88%E4%B8%BB%E8%AE%B2%EF%BC%9A%E5%91%A8%E9%98%B3%EF%BC%89/">
-                        <span class="hidden-mobile">JVM & JUC 基础课程（主讲：周阳）</span>
+                      <a href="/2020/07/20/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B9%8B%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/">
+                        <span class="hidden-mobile">动态规划之二叉搜索树</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -492,7 +441,7 @@ class Solution {
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "动态规划之二叉搜索树&nbsp;",
+        "计算机网络之ARP协议&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
