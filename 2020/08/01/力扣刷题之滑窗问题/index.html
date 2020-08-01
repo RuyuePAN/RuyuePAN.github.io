@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>动态规划之博弈问题 - Hexo</title>
+  <title>力扣刷题之滑窗问题 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -153,8 +153,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-07-24 22:25">
-      July 24, 2020 pm
+    <time datetime="2020-08-01 17:49">
+      August 1, 2020 pm
     </time>
   </div>
 
@@ -164,7 +164,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      208 字
+      1.2k 字
     </span>
   
 
@@ -174,7 +174,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      2
+      15
        分钟
     </span>
   
@@ -205,49 +205,106 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <p><strong>题目：1025. 除数博弈</strong><br>爱丽丝和鲍勃一起玩游戏，他们轮流行动。爱丽丝先手开局。</p>
-<p>最初，黑板上有一个数字 N 。在每个玩家的回合，玩家需要执行以下操作：<br>选出任一 x，满足 0 &lt; x &lt; N 且 N % x == 0 。用 N - x 替换黑板上的数字 N 。</p>
-<p>如果玩家无法执行这些操作，就会输掉游戏。</p>
-<p>只有在爱丽丝在游戏中取得胜利时才返回 True，否则返回 false。假设两个玩家都以最佳状态参与游戏。</p>
-<pre>
-<font face="黑体" font size="3">示例 1：
+              <font size="4.5">
+**632\. 最小区间**
 
-输入：2
-输出：true
-解释：爱丽丝选择 1，鲍勃无法进行操作。
-
-示例 2：
-
-输入：3
-输出：false
-解释：爱丽丝选择 1，鲍勃也选择 1，然后爱丽丝无法进行操作。
-
-提示：
-
-    1 <= n <="1000" pre>
+<p>你有 k 个升序排列的整数数组。找到一个最小区间，使得 k 个列表中的每个列表至少有一个数包含在其中。</p>
+<p>我们定义如果 b-a &lt; d-c 或者在 b-a == d-c 时 a &lt; c，则区间 [a,b] 比 [c,d] 小。</p>
+<pre><font size="4">示例 1:
+输入:[[4,10,15,24,26], [0,9,12,20], [5,18,22,30]]
+输出: [20,24]
+解释: 
+列表 1：[4, 10, 15, 24, 26]，24 在区间 [20,24] 中。
+列表 2：[0, 9, 12, 20]，20 在区间 [20,24] 中。
+列表 3：[5, 18, 22, 30]，22 在区间 [20,24] 中。
+</font></pre>
 
 <p><strong>解题思路：</strong></p>
-<p>首先可以有一个dp数组辅助分析。dp[i]表示N = i时，游戏的结果。最终的输出是dp[N]</p>
-<p>随着分析，我们很快会发现游戏结果是固定的。</p>
-<p>若N为奇数，则奇数的因子不会有偶数，所以奇数的因子只有奇数。故x一定为奇数，设N - x = t，t一定为偶数。<br>则可以查找dp[t]，结果和dp[t]的结果相反。</p>
-<p>这是什么意思呢？如果dp[t]是true，则dp[N]为false。如果dp[t]是false，则dp[N]为true。</p>
-<p>为什么会这样？因为当Alice拿到N这个数字，选了x之后，就轮到Bob拿到t，在t上继续游戏，但是dp[t]记录的是<br>Alice拿到t之后的输赢，也就是先手拿到t的输赢，所以如果Bob拿到t之后能赢，意味着Alice拿到N是输的。</p>
-<p>这就是前面说的游戏的结果固定。</p>
-<p>若N为偶数：</p>
-<p>N = 2时，已知dp[2] = true。</p>
-<p>N = 4时，4的可选因数有1,2。Alice要想赢，则可以查表，<br>dp[3] = false 和 dp[2] = true，如前所述，Alice的输赢和查表的结果相反，那么Alice一定会选择1。<br>所以dp[4] = true。</p>
-<p>N = 6时，6的可选因数有1,2,3。dp[5] = false,dp[4] = true,dp[3] = false。Alice想要赢，则一定会选择<br>1，所以dp[6] = true。</p>
-<p>发现什么没有？<br>dp[奇数]为dp[偶数]取反。而当N为偶数的时候，可以总取1，由于此时dp[N - 1]总为false，Alice一定会赢。</p>
-<p>也就是说N为偶数一定赢，N为奇数一定输。</p>
+<p>如果nums列表里的所有数的最大值为Max，最小值为Min，则题目找到的结果<br>一定是res &lt;= [Min, Max]的。</p>
+<p>如果有一个列表：</p>
+<pre><font size="4">nums = [[-1,2,3],[1],[1,2],[1,1,3]]</font></pre>
+<p>其实，列表的集合为：</p>
+<pre><font size="4">0: [-1, 2, 3]
+1: [1]
+2: [1, 2]
+3: [1, 1, 3]</font></pre>
+<p>冒号前面的是nums列表里每个数组的索引，冒号后面是索引代表的数组。</p>
+<p>与之相对的，也可以得到这样一个哈希map：</p>
+<pre><font size="4">-1: [0]
+ 1: [1, 2, 3, 3]
+ 2: [0, 2]
+ 3: [0, 3]</font></pre>
+
+<p>即-1出现在0号列表中，1出现在了1,2,3号列表中，并且还在3号列表里<br>出现了两次。2出现在了0,2号列表中。3出现在了0,3号列表中。</p>
+<p>根据题意，我们要得到一个区间，使得nums里的每个列表都有一个数，<br>在该区间内。也就是说，我们可以遍历哈希map的所有值，只要出现的值能够<br>涵盖nums的所有索引即可。</p>
+<p>这是什么意思呢？<br>-1出现在了0号列表，1出现在1,2,3号列表，nums里的每个列表，都存在元素出现在区间[-1,1]里了。<br>所以符合题意的区间有[-1, 1],[-1,2],[-1,3],[1,2],[1,3]。但是题目要求最小区间，即区间长度最短，<br>长度相等时选左区间更小者。所以最终答案是[-1,1]。</p>
+<p>哈希map里的每个key就是区间的左右端点的备选，设左区间是left，右区间是right。由于之前所述，则题目找到的结果<br>一定是res &lt;= [Min, Max]的。在初始化的时候，left = Min（左端点从最小值开始搜索）。而right的搜索，到Max停止。<br>这就相当于我们直接在哈希map中搜索。</p>
+<p>然后就涉及到滑窗问题，这里的滑窗，左指针就是left，右指针就是right，滑窗就是一个区间。在搜索中，<br>一面要找到包含了所有nums数组索引的滑窗，一面要使得滑窗最小。<br>前者需要右指针右移。后者需要左指针右移。当然不是想移就移的，需要符合条件。</p>
+<p>开始搜索的时候，left和right在一起，都指向了哈希map的第一个key，也就是-1。然后遍历键-1的所有值，也就是[0]。滑窗还<br>没包含所有索引，right右移，指向了1，发现键1的所有值为1,2,3。这下刚好包含了所有的索引，记录下来，继续往下遍历。<br>万一还能找到更短的区间呢？</p>
+<p>右移左指针，让滑窗内由不完全包含所有索引了，迫使右指针继续向前探索。只有找到更小的right - left才会更新<br>区间，这样就同时满足了最小区间的两个条件。</p>
+<p>综上所述：</p>
+<p>right右移当仅当滑窗内的value不能包含nums的所有区间。</p>
+<p>left右移当仅当滑窗内的value包含了所有nums内的区间。</p>
+<p>res更新当仅当当前窗口包含所有区间，并且[left, right]是更小的区间。</p>
 <p>代码如下：</p>
-<pre>
-<font face="黑体" font size="3">class Solution {
-    public boolean divisorGame(int N) {
-        return N % 2 == 0;
+<pre><font size="4">
+class Solution {
+    public int[] smallestRange(List<List<Integer>> nums) {
+        int size = nums.size();                 
+        int xMax = Integer.MIN_VALUE;           // 记录nums列表的最大值和最小值
+        int xMin = Integer.MAX_VALUE;
+        Map<Integer, list<integer>> indices = new HashMap<>();      // 数字:[索引数组]
+
+        // 找到最大最小值，建立哈希Map
+        for(int i = 0; i < size; i++){          // 遍历nums列表的内的每个List
+            for(int x : nums.get(i)){                      // 遍历每个列表内的数字
+                List<Integer> list = indices.getOrDefault(indices.get(x), new LinkedList<Integer>());
+                list.add(i);                    // 把区间索引加到列表里去
+                indices.put(x, list);
+                xMax = Math.max(x, xMax);
+                xMin = Math.min(x, xMin);
+            }
+        }
+
+        int inside = 0;
+        int left = xMin;
+        int right = xMin - 1;
+        int bestRight = xMax;
+        int bestLeft = xMin;
+        int[] freq = new int[size];     // 用来记录索引出现的次数
+
+        while(right < xMax){            // 遍历这个哈希map
+            // 右指针右移
+            right++;                    // 加一
+            if(indices.containsKey(right)){            // 包含这个key（nums包含这个数字）
+                for(int x : indices.get(right)){          // 遍历这个key的所有索引
+                    freq[x]++;
+                    if(freq[x] == 1)    inside++;              // 滑窗内包含的数组个数加一
+                }
+                // inside == size时，尝试更新区间
+                while(inside == size){
+                    if(right - left < bestRight - bestLeft){
+                        bestLeft = left;
+                        bestRight = right;
+                    }
+                    if(indices.containsKey(left)){
+                        for(int x : indices.get(left)){
+                            freq[x]--;
+                            if(freq[x] == 0)    inside--;
+                        }               
+                    } 
+                    left++;
+                }
+            }
+
+        }
+        return new int[]{bestLeft, bestRight};
     }
 }
-</font></pre>
-</=></font></pre>
+</Integer></Integer></Integer,></List<Integer></font></pre>
+
+
+</font>
             </article>
             <hr>
             <div>
@@ -259,7 +316,7 @@
                     
                       <a class="hover-with-bg" href="/tags/leetcode%E5%88%B7%E9%A2%98/">leetcode刷题</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a>
+                      <a class="hover-with-bg" href="/tags/%E5%8F%8C%E6%8C%87%E9%92%88%EF%BC%8C%E5%93%88%E5%B8%8C%E8%A1%A8/">双指针，哈希表</a>
                     
                   </div>
                 
@@ -272,18 +329,12 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/08/01/%E5%8A%9B%E6%89%A3%E5%88%B7%E9%A2%98%E4%B9%8B%E6%BB%91%E7%AA%97%E9%97%AE%E9%A2%98/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">力扣刷题之滑窗问题</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/07/23/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B9%8B%E6%9C%80%E5%A4%A7%E6%AD%A3%E6%96%B9%E5%BD%A2/">
-                        <span class="hidden-mobile">动态规划之最大正方形</span>
+                      <a href="/2020/07/24/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B9%8B%E5%8D%9A%E5%BC%88%E9%97%AE%E9%A2%98/">
+                        <span class="hidden-mobile">动态规划之博弈问题</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -422,7 +473,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "动态规划之博弈问题&nbsp;",
+        "力扣刷题之滑窗问题&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
